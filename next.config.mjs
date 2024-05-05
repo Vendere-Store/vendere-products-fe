@@ -1,22 +1,31 @@
-import { NextFederationPlugin } from '@module-federation/nextjs-mf';
+import {NextFederationPlugin} from '@module-federation/nextjs-mf';
 
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
     reactStrictMode: true,
-    webpack(config, { isServer }) {
+    webpack(config, {isServer}) {
         config.plugins.push(
             new NextFederationPlugin({
                 name: 'remote',
                 filename: 'static/chunks/remoteEntry.js',
                 exposes: {
                     '/': './src/pages/',
-                    './Products': './src/pages/products/index', // Adjust as necessary for what you want to expose
-                    './ProductDetails/': './src/pages/products/[id]', // Adjust as necessary for what you want to expose
+                    './Products': './src/pages/products/index',
+                    './ProductDetails': './src/pages/products/[id]/index',
                 },
                 shared: {
-                    // specify shared dependencies
-                    // read more in Shared Dependencies section
+                    '@headlessui/react': {
+                        eager: true,
+                        requiredVersion: false,
+                        singleton: true,
+                    },
+                    '@heroicons/react': {
+                        eager: true,
+                        requiredVersion: false,
+                        singleton: true,
+                    },
+                    // Ensure CSS-in-JS libraries or other shared libraries are correctly configured
                 },
             })
         );

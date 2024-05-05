@@ -1,0 +1,5 @@
+apiVersion: v2
+name: vendere-products-fe
+description: A Helm chart for deploying the vendere-products-fe service
+version: 1.0.0
+appVersion: 1.0.0

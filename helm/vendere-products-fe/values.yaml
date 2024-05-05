@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: sh0n3/vendere-products-fe
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3001
+  targetPort: 3000
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: products.vendere.store
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: vendere-products-fe
+              port:
+                number: 3001
+
+controller:
+  ingressClass: "my-nginx-ingress"

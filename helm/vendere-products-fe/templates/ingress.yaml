@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vendere-products-fe
+spec:
+  rules:
+    - host: products.vendere.store
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vendere-products-fe
+                port:
+                  number: 3001

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.nameOverride | default .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.nameOverride | default .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nameOverride | default .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Values.nameOverride | default .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          resources:
+            {{- with .Values.resources }}
+              {{ toYaml . | nindent 12 }}
+              {{- end }}

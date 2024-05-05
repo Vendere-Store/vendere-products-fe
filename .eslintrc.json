@@ -1,3 +1,12 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"  // Enables eslint-plugin-prettier and eslint-config-prettier
+  ],
+  "rules": {
+    // You can customize ESLint rules here
+    "prettier/prettier": ["error", {}, {
+      "usePrettierrc": true
+    }]
+  }
 }
