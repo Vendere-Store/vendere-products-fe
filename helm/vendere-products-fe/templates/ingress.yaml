@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: vendere-products-fe
 spec:
+  ingressClassName: nginx
   rules:
     - host: products.vendere.store
       http:
