@@ -12,7 +12,7 @@ const nextConfig = {
                 exposes: {
                     '/': './src/pages/',
                     './Products': './src/pages/products/index',
-                    './ProductDetails': './src/pages/products/[id]/index',
+                    // './ProductDetails': './src/pages/products/[id]/index',
                 },
                 shared: {
                     '@headlessui/react': {

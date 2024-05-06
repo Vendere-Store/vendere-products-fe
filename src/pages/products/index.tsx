@@ -2,10 +2,12 @@ import dynamic from 'next/dynamic';
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
-
-import { ProductsList } from 'vendere-storybook-test';
 import { Category } from '@/types/types';
 import { classNames } from '@/utils/helpers';
+import http from '@/services/http';
+import { GetServerSideProps } from 'next';
+import { Product, ProductsApiResponse } from '@/types/product';
+import { ProductCard } from 'vendere-storybook-test';
 
 const ProductFilters = dynamic(() => import('../../components/Filters'), {
   ssr: false
@@ -64,47 +66,49 @@ const filters = [
     ]
   }
 ];
-const products = [
-  {
-    id: 1,
-    name: 'Earthen Bottle',
-    href: '/products/1',
-    price: '$48',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-    imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.'
-  },
-  {
-    id: 2,
-    name: 'Nomad Tumbler',
-    href: '/products/2',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-    imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.'
-  },
-  {
-    id: 3,
-    name: 'Focus Paper Refill',
-    href: '/products/3',
-    price: '$89',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
-    imageAlt: 'Person using a pen to cross a task off a productivity paper card.'
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    href: '/products/4',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.'
-  }
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: 'Earthen Bottle',
+//     href: '/products/1',
+//     price: '$48',
+//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+//     imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.'
+//   },
+//   {
+//     id: 2,
+//     name: 'Nomad Tumbler',
+//     href: '/products/2',
+//     price: '$35',
+//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
+//     imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.'
+//   },
+//   {
+//     id: 3,
+//     name: 'Focus Paper Refill',
+//     href: '/products/3',
+//     price: '$89',
+//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
+//     imageAlt: 'Person using a pen to cross a task off a productivity paper card.'
+//   },
+//   {
+//     id: 4,
+//     name: 'Machined Mechanical Pencil',
+//     href: '/products/4',
+//     price: '$35',
+//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+//     imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.'
+//   }
+// ];
 
-const Products: React.FC = () => {
+interface ProductsProps {
+  products: Product[];
+}
+
+const Products: React.FC<ProductsProps> = ({ products }) => {
   return (
     <div className="bg-white">
       <div>
-        {/* Mobile filter dialog */}
-
         <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
 
@@ -175,14 +179,40 @@ const Products: React.FC = () => {
             <ProductFilters />
 
             {/* Product grid */}
+
             <div className="lg:col-span-3">
-              <ProductsList products={products} />
+              <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-4 lg:max-w-7xl lg:px-8">
+                <h2 className="sr-only">Products</h2>
+                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                  {products?.map((product: Product, index: number) => (
+                    <ProductCard
+                      key={product.id}
+                      name={product.name}
+                      price={product.price}
+                      href={`products/${product.id}`}
+                      imageSrc={product?.images[0]?.src}
+                      imageAlt={product?.images[0]?.alt}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const { data } = await http.get<ProductsApiResponse>('products');
+    console.log('data', data);
+    return { props: { products: data || [] } };
+  } catch (error) {
+    console.log(error);
+    return { props: { products: [] } }; // Handle errors or empty responses gracefully
+  }
 };
 
 export default Products;
