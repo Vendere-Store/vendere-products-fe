@@ -105,7 +105,7 @@ interface ProductsProps {
   products: Product[];
 }
 
-const Products: React.FC<ProductsProps> = ({ products }) => {
+const Products: any = (props: any) => {
   return (
     <div className="bg-white">
       <div>
@@ -184,7 +184,7 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
               <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-4 lg:max-w-7xl lg:px-8">
                 <h2 className="sr-only">Products</h2>
                 <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                  {products?.map((product: Product, index: number) => (
+                  {props?.products?.map((product: Product, index: number) => (
                     <ProductCard
                       key={product.id}
                       name={product.name}
@@ -204,14 +204,18 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+Products.getInitialProps = async () => {
   try {
     const { data } = await http.get<ProductsApiResponse>('products');
     console.log('data', data);
-    return { props: { products: data || [] } };
+    console.log('loading slow api test');
+    const products = data || [];
+
+    // console.log('produkti', products);
+    return { products: data || [] };
   } catch (error) {
     console.log(error);
-    return { props: { products: [] } }; // Handle errors or empty responses gracefully
+    // return { props: { products: [] } }; // Handle errors or empty responses gracefully
   }
 };
 
