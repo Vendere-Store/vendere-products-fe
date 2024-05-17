@@ -66,46 +66,12 @@ const filters = [
     ]
   }
 ];
-// const products = [
-//   {
-//     id: 1,
-//     name: 'Earthen Bottle',
-//     href: '/products/1',
-//     price: '$48',
-//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-//     imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.'
-//   },
-//   {
-//     id: 2,
-//     name: 'Nomad Tumbler',
-//     href: '/products/2',
-//     price: '$35',
-//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-//     imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.'
-//   },
-//   {
-//     id: 3,
-//     name: 'Focus Paper Refill',
-//     href: '/products/3',
-//     price: '$89',
-//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
-//     imageAlt: 'Person using a pen to cross a task off a productivity paper card.'
-//   },
-//   {
-//     id: 4,
-//     name: 'Machined Mechanical Pencil',
-//     href: '/products/4',
-//     price: '$35',
-//     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-//     imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.'
-//   }
-// ];
 
 interface ProductsProps {
   products: Product[];
 }
 
-const Products: any = (props: any) => {
+const Products: any = (props: ProductsProps) => {
   return (
     <div className="bg-white">
       <div>
@@ -207,15 +173,12 @@ const Products: any = (props: any) => {
 Products.getInitialProps = async () => {
   try {
     const { data } = await http.get<ProductsApiResponse>('products');
-    console.log('data', data);
-    console.log('loading slow api test');
     const products = data || [];
 
-    // console.log('produkti', products);
-    return { products: data || [] };
+    return { products };
   } catch (error) {
     console.log(error);
-    // return { props: { products: [] } }; // Handle errors or empty responses gracefully
+    return { props: { products: [] } }; // Handle errors or empty responses gracefully
   }
 };
 
