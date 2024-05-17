@@ -1,5 +1,5 @@
 # Use an official Node runtime as a parent image
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 ENV NEXT_PRIVATE_LOCAL_WEBPACK=true
 ENV NODE_ENV=production
 
-# Copy package.json, package-lock.json, and yarn.lock files
+# Copy package.json and yarn.lock files
 COPY package.json yarn.lock ./
 
 # Install dependencies
@@ -20,10 +20,25 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Build the application
-RUN if [ "$NODE_ENV" = "development" ]; then yarn install --include=dev; fi && \
-    yarn build
+RUN yarn build
 
-# Vendere Core listens on port 3000 by default, expose it
+# Production image
+FROM node:20-alpine
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Set environment variables
+ENV NEXT_PRIVATE_LOCAL_WEBPACK=true
+ENV NODE_ENV=production
+
+# Copy the build output and dependencies from the builder stage
+COPY --from=builder /usr/src/app /usr/src/app
+
+# Install only production dependencies
+RUN yarn install --production --frozen-lockfile
+
+# Expose port 3001
 EXPOSE 3001
 
 # Command to run the app

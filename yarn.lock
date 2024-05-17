@@ -3925,10 +3925,10 @@ vary@^1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-vendere-storybook-test@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/vendere-storybook-test/-/vendere-storybook-test-1.1.0.tgz"
-  integrity sha512-9PyddGBN1c+Gy5A3wkYNwa3T6sp9LHcusZY2up1vLKT8p7I/7S4uY2DSmwx5O1WtunbEwWfAQT8HFCsk7xeG9Q==
+vendere-storybook-test@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/vendere-storybook-test/-/vendere-storybook-test-1.1.1.tgz#bdafb94836a1f888e6ac9114f1ac2842a0007dfd"
+  integrity sha512-BK3DYrEt86weDguaNArH+POqH5NFPYgaDfyTzUnAV1pQ2wQ4wH2KGEhyOQUDYzvMWoZinjZ4HoyyZkVaZlV/mw==
   dependencies:
     "@headlessui/react" "^1.7.19"
     "@heroicons/react" "^2.1.3"
